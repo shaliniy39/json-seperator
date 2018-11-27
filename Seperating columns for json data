@@ -1,0 +1,14 @@
+#JSON columns are "a", "b", "c", "d"
+
+flatten_json <- . %>% 
+  str_c(., collapse = ",") %>% 
+  str_c("[", ., "]") %>% 
+  fromJSON(flatten = T)
+parse <- . %>% 
+  bind_cols(flatten_json(.$a)) %>%
+  bind_cols(flatten_json(.$b)) %>% 
+  bind_cols(flatten_json(.$c)) %>% 
+  bind_cols(flatten_json(.$d)) %>% 
+  select(-a, -b, -c, -d)
+
+train <- parse(train)
